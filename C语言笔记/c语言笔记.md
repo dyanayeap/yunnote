@@ -186,7 +186,7 @@ int main()
 //输出结果如下：
 ```
 
-![1652843029605](C:\Users\goddyan\AppData\Roaming\Typora\typora-user-images\1652843029605.png)
+![image-20220523111628461](c%E8%AF%AD%E8%A8%80%E7%AC%94%E8%AE%B0.assets/image-20220523111628461.png)
 
 实际上： **==&arr 表示的是数组的地址，而不是数组首元素的地址。==**
 
