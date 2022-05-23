@@ -459,3 +459,100 @@ tips：void* 类型不能进行解引用操作
 
 4. 如果嵌套了结构体的情况，嵌套的结构体对齐到自己的最大对齐数的整数倍处，结构体的整体大小就是所有最大对齐数（含嵌套结构体的对齐数）的整数倍。
 
+## 23、字符串相关
+
+### 1、strlen
+
+```cpp
+size_t strlen ( const char * str );
+```
+
+- 字符串已经 '\0' 作为结束标志，strlen函数返回的是在字符串中 '\0' 前面出现的字符个数（不包 含 '\0' )
+- 参数指向的字符串必须要以 '\0' 结束。
+- 注意函数的**返回值为size_t**，是无符号的（ 易错 ）
+- 学会strlen函数的模拟实现
+
+//模拟实现
+
+```cpp
+#include <stdio.h>
+
+int my_strlen(const char* str){
+	int count = 0;
+    assert(str! = NULL);
+    
+    while(*str != '\0'){
+        count++;
+        str++;
+    }
+    return count;  
+}
+```
+
+
+
+```cpp
+#include <stdio.h>
+int main()
+{
+ const char*str1 = "abcdef";
+ const char*str2 = "bbb";
+ if(strlen(str2)-strlen(str1)>0)
+ {
+ printf("str2>str1\n");
+ } 
+ else
+ {
+ printf("srt1>str2\n");
+ }
+ return 0;
+}
+//因为strlen 返回无符号数
+//从而 strlen(str2)-strlen(str1) 哪怕是负数 但是最后都会转化为unsigned int 所以都换转化成无符号数 一直输出interestinstr2>str1
+```
+
+### 2、strcpy
+
+```CPP
+//将source地址的数据拷贝到destination地址处
+char* strcpy(char * destination, const char * source );
+```
+
+- 源字符串必须以 '\0' 结束。 
+- 会将源字符串中的 '\0' 拷贝到目标空间。 
+- 目标空间必须足够大，以确保能存放源字符串。
+-  目标空间必须可变。 学会模拟实现。
+
+模拟实现
+
+```cpp
+char* my_strcopy(char* dest,char* src){
+	assert(dest != NULL);
+    asser(src != NULL);
+    /*while(*src != '\0'){
+        *dest = *src;
+        dest++;
+        src++;
+    }
+    *dest = *src;*/
+    //简化
+    char* ret = dest;
+    //拷贝src指向的字符串到dest指向的空间，包含'\0'
+    while(*dest++ = *src++){
+        ;
+    }
+    //返回目的空间的起始地址
+    return ret;
+}
+```
+
+### 3、strcat
+
+```cpp
+char * strcat ( char * destination, const char * source );
+```
+
+- 源字符串必须以 '\0' 结束。 
+- 目标空间必须有足够的大，能容纳下源字符串的内容。
+-  目标空间必须可修改。
+-  字符串自己给自己追加，如何？
