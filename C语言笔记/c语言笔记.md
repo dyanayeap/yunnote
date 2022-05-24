@@ -548,6 +548,8 @@ char* my_strcopy(char* dest,char* src){
 
 ### 3、strcat
 
+追加字符串
+
 ```cpp
 char * strcat ( char * destination, const char * source );
 ```
@@ -556,3 +558,107 @@ char * strcat ( char * destination, const char * source );
 - 目标空间必须有足够的大，能容纳下源字符串的内容。
 -  目标空间必须可修改。
 -  字符串自己给自己追加，如何？
+
+模拟实现：
+
+```cpp
+char* my_strcat(char* dest,const char*src){
+    char* ret = dest;
+	assert(dest != NULL);
+	assert(src);//等价于上述内容
+    //找到目的字符串的'\0'
+    while(*dest != '\0'){
+        dest++;
+    }
+    //拷贝追加
+    while(*dest++ = *src++){
+        ;
+    }
+    return ret;
+}
+```
+
+### 4、strcmp
+
+比较字符串
+
+```cpp
+int strcmp ( const char * str1, const char * str2 );
+```
+
+标准规定： 
+
+- 第一个字符串大于第二个字符串，则返回大于0的数字 
+- 第一个字符串等于第二个字符串，则返回0 
+- 第一个字符串小于第二个字符串，则返回小于0的数字 
+- 那么如何判断两个字符串？
+
+模拟实现：
+
+```cpp
+my_strcmp(const char* str1,const char*str2){
+	assert(str1&&str2);
+	while(*str1 == *str2){
+		if(*str1 == '\0'){
+			return 0;
+		}
+		str1++;
+		str2++;
+	}
+	if(*str1>*str2)
+        return 1;//大于
+    else
+        return -1;
+}
+```
+
+### 5、strncpy
+
+```cpp
+char * strncpy ( char * destination, const char * source, size_t num );
+```
+
+- 拷贝num个字符从源字符串到目标空间。 
+- 如果源字符串的长度小于num，则拷贝完源字符串之后，在目标的后边追加0，直到num个。
+
+模拟实现：
+
+```cpp
+char* my_strncpy(char* dest,const char* src,int size){
+	char* ret = dest;
+	while(size&&(*dest++ = *src++)){
+        size--;
+    }
+    if(size)
+        while(--size)
+            *dest++ = '\0';
+    return ret;
+}
+```
+
+### 6、strncat
+
+```c
+char * strncat ( char * destination, const char * source, size_t num );
+```
+
+- Appends the first *num* characters of *source* to *destination*, plus a terminating null-character.(追加第一个源地址字符到目的地址，加上一个结束的空字符)
+- If the length of the C string in *source* is less than *num*, only the content up to the terminating null-character is copied.（如果c字符串的源地址少于num，只复制结束空字符之前的内容）
+
+模拟实现：
+
+```c
+char* my_strncat(char* front,const char* back,int count){
+    char* ret = front;
+    while(*front++)
+        ;
+    front--;
+    while(count--)
+        if(!(*front++ = *back++))
+            return ret;
+    *front = '\0';
+    return(ret);
+            
+}
+```
+
