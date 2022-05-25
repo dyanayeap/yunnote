@@ -662,3 +662,75 @@ char* my_strncat(char* front,const char* back,int count){
 }
 ```
 
+### 7、strncmp
+
+```c
+int strncmp ( const char * str1, const char * str2, size_t num );
+```
+
+![image-20220525085220816](c%E8%AF%AD%E8%A8%80%E7%AC%94%E8%AE%B0.assets/image-20220525085220816.png)
+
+### 8、strstr
+
+```c
+char * strstr ( const char *str1, const char * str2);
+```
+
+- Returns a pointer to the first occurrence of str2 in str1, or a null pointer if str2 is not part of str1.
+
+模拟实现：
+
+```c
+#include <assert.h>
+char * my_strstr ( const char *str1, const char * str2){
+    assert(p1);
+    assert(p2);
+    char *s1 = p1;
+    char* s2 = p2;
+    char* cur = p1;
+    if(*p2 == '\0') return p;
+    while(*cur){
+        s1 = cur;
+        s2 = p2;
+        while((*s1 == *s2)&&(*s1 != '\0')&&(*s2 != '\0')){
+            s1++;
+            s2++;
+        }
+        if(*s2 == '\0'){
+            return cur;
+        }
+        cur++;
+    }
+    return NULL;
+}
+```
+
+
+
+### 9、strtok
+
+```c
+char * strtok ( char * str, const char * sep );
+```
+
+- sep参数是个字符串，定义了用作分隔符的字符集合 
+- 第一个参数指定一个字符串，它包含了0个或者多个由sep字符串中一个或者多个分隔符分割的标记。
+- strtok函数找到str中的下一个标记，并将其用 \0 结尾，返回一个指向这个标记的指针。（注： strtok函数会改变被操作的字符串，所以在使用strtok函数切分的字符串一般都是临时拷贝的内容 并且可修改。）
+- strtok函数的第一个参数不为 NULL ，函数将找到str中第一个标记，strtok函数将保存它在字符串 中的位置。 strtok函数的第一个参数为 NULL ，函数将在同一个字符串中被保存的位置开始，查找下一个标 记。
+- 如果字符串中不存在更多的标记，则返回 NULL 指针。
+
+
+
+### 10、strerror
+
+```c
+char * strerror ( int errnum );
+```
+
+返回错误码，所对应的错误信息。
+
+
+
+#### 字符分类函数
+
+![image-20220525102931905](c%E8%AF%AD%E8%A8%80%E7%AC%94%E8%AE%B0.assets/image-20220525102931905.png)
