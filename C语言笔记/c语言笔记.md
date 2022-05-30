@@ -521,7 +521,7 @@ char* strcpy(char * destination, const char * source );
 - 源字符串必须以 '\0' 结束。 
 - 会将源字符串中的 '\0' 拷贝到目标空间。 
 - 目标空间必须足够大，以确保能存放源字符串。
--  目标空间必须可变。 学会模拟实现。
+- 目标空间必须可变。 学会模拟实现。
 
 模拟实现
 
@@ -556,8 +556,8 @@ char * strcat ( char * destination, const char * source );
 
 - 源字符串必须以 '\0' 结束。 
 - 目标空间必须有足够的大，能容纳下源字符串的内容。
--  目标空间必须可修改。
--  字符串自己给自己追加，如何？
+- 目标空间必须可修改。
+- 字符串自己给自己追加，如何？
 
 模拟实现：
 
@@ -734,3 +734,310 @@ char * strerror ( int errnum );
 #### 字符分类函数
 
 ![image-20220525102931905](c%E8%AF%AD%E8%A8%80%E7%AC%94%E8%AE%B0.assets/image-20220525102931905.png)
+
+### 11、memcpy
+
+```c
+void * memcpy ( void * destination, const void * source, size_t num );
+```
+
+![image-20220526092855531](c%E8%AF%AD%E8%A8%80%E7%AC%94%E8%AE%B0.assets/image-20220526092855531.png)
+
+模拟实现：
+
+```c
+void * memcpy ( void * dst, const void * src, size_t count)
+{
+        void * ret = dst;
+   assert(dst);
+   assert(src);
+        /*
+         * copy from lower addresses to higher addresses
+         */
+        while (count--) {
+                *(char *)dst = *(char *)src;
+                dst = (char *)dst + 1;
+                src = (char *)src + 1;
+       }
+        return(ret);
+}
+```
+
+
+
+### 12、memmove
+
+```c
+void * memmove ( void* destination, const void * source, size_t num );
+```
+
+![image-20220526092949466](c%E8%AF%AD%E8%A8%80%E7%AC%94%E8%AE%B0.assets/image-20220526092949466.png)
+
+模拟实现：
+
+```cpp
+void * memmove ( void * dst, const void * src, size_t count)
+{
+        void * ret = dst;
+    //从q
+        if (dst <= src || (char *)dst >= ((char *)src + count)) {
+                /*
+                 * Non-Overlapping Buffers
+                 */
+                 while (count--) {
+                        *(char *)dst = *(char *)src;
+                        dst = (char *)dst + 1;
+                        src = (char *)src + 1;
+               }
+       }
+        else {
+                /*
+                 * Overlapping Buffers
+                 * copy from higher addresses to lower addresses
+                 */
+                dst = (char *)dst + count - 1;
+                src = (char *)src + count - 1;
+                while (count--) {
+                        *(char *)dst = *(char *)src;
+                        dst = (char *)dst - 1;
+                        src = (char *)src - 1;
+               }
+       }
+        return(ret);
+}
+                 
+```
+
+
+
+### 13、memcmp
+
+```c
+int memcmp ( const void * ptr1, 
+ 			const void * ptr2, 
+			size_t num );
+```
+
+![image-20220526093033847](c%E8%AF%AD%E8%A8%80%E7%AC%94%E8%AE%B0.assets/image-20220526093033847.png)
+
+## 24、位段
+
+位段的声明和结构是类似的，有两个不同： 
+
+1. 位段的成员==必须==是 **int、unsigned int 或signed int** 
+2. 位段的成员名后边有**一个冒号和一个数字**
+
+
+
+位段的内存分配
+
+1. 位段的成员可以是 int unsigned int signed int 或者是 char （属于整形家族）类型 
+2. 位段的空间上是按照需要以4个字节（ int ）或者1个字节（ char ）的方式来开辟的
+3.  位段涉及很多不确定因素，位段是不跨平台的，注重可移植的程序应该避免使用位段
+
+![image-20220530091828817](c%E8%AF%AD%E8%A8%80%E7%AC%94%E8%AE%B0.assets/image-20220530091828817.png)
+
+**总结：** 
+
+跟结构相比，位段可以达到同样的效果，但是可以很好的节省空间，但是有跨平台的问题存在。
+
+## 25、枚举和共用体
+
+枚举类型的定义（枚举为常量）
+
+```cpp
+enum Day//星期
+{
+ Mon,
+ Tues,
+ Wed,
+ Thur,
+ Fri,
+ Sat,
+ Sun
+};
+enum Sex//性别
+{
+ MALE,
+ FEMALE,
+ SECRET
+}；
+enum Color//颜色
+{
+ RED,
+ GREEN,
+ BLUE
+};
+```
+
+**枚举的优点：** 
+
+1. 增加代码的可读性和可维护性 
+2. 和#define定义的标识符比较枚举有类型检查，更加严谨。
+3. 防止了命名污染（封装） 
+4. 便于调试 
+5. 使用方便，一次可以定义多个常量
+
+**联合类型的定义** 
+
+​		**联合**也是一种特殊的自定义类型 这种类型定义的变量也包含一系列的成员，特征是这些成员公用同一块空间（所以联合也叫共用体）。
+
+```cpp
+//联合类型的声明
+union Un
+{
+ char c;
+ int i;
+};
+//联合变量的定义
+union Un un;
+//计算连个变量的大小
+printf("%d\n", sizeof(un));
+```
+
+ **联合特点：**
+
+​		联合的成员是共用同一块内存空间的，这样一个联合变量的大小，至少是最大成员的大小（因为联 合至少得有能力保存最大的那个成员）。26、
+
+
+
+## 26、动态内存分配
+
+为什么要动态内存分配
+
+1. 空间开辟大小是固定的。
+2. 数组在申明的时候，必须指定数组的长度，它所需要的内存在编译时分配。 
+
+​		但是对于空间的需求，不仅仅是上述的情况。有时候我们需要的空间大小在程序运行的时候才能知道， 那数组的编译时开辟空间的方式就不能满足了。 这时候就只能试试动态存开辟了。
+
+
+
+**malloc**和**free**
+
+```c++
+void* malloc (size_t size);
+```
+
+这个函数向内存**申请**一块连续可用的空间，并返回指向这块空间的指针。 
+
+- 如果开辟成功，则返回一个指向开辟好空间的指针。
+-  如果开辟失败，则返回一个NULL指针，因此malloc的返回值一定要做检查。 
+- 返回值的类型是 void* ，所以malloc函数并不知道开辟空间的类型，具体在使用的时候使用者自己 来决定。
+-  如果参数 size 为0，malloc的行为是标准是未定义的，取决于编译器。
+
+```c
+void free (void* ptr);
+```
+
+free函数用来**释放**动态开辟的内存。 
+
+- 如果参数 ptr 指向的空间不是动态开辟的，那free函数的行为是未定义的。
+-  如果参数 ptr 是NULL指针，则函数什么事都不做。
+
+
+
+**calloc**
+
+```c
+void* calloc (size_t num, size_t size);
+```
+
+- 函数的功能是为 num 个大小为 size 的元素开辟一块空间，并且把空间的每个字节初始化为0。
+-  与函数 malloc 的区别只在于 calloc 会在返回地址之前把申请的空间的每个字节初始化为全0。
+
+
+
+**realloc**
+
+```c
+void* realloc (void*ptr, size_t size);
+```
+
+realloc函数的出现让动态内存管理更加灵活。 
+
+有时会我们发现过去申请的空间太小了，有时候我们又会觉得申请的空间过大了，那为了合理的时 候内存，我们一定会对内存的大小做灵活的调整。那 realloc 函数就可以做到对动态开辟内存大小 的调整。
+
+ptr 是要调整的内存地址 size 调整之后新大小 返回值为调整之后的内存起始位置。 这个函数调整原内存空间大小的基础上，还会将原来内存中的数据移动到 新 的空间。 
+
+realloc在调整内存空间的是存在两种情况：
+
+![image-20220530113224174](c%E8%AF%AD%E8%A8%80%E7%AC%94%E8%AE%B0.assets/image-20220530113224174.png)
+
+**常见的动态内存错误：**
+
+![image-20220530113523900](c%E8%AF%AD%E8%A8%80%E7%AC%94%E8%AE%B0.assets/image-20220530113523900.png)
+
+![image-20220530113532632](c%E8%AF%AD%E8%A8%80%E7%AC%94%E8%AE%B0.assets/image-20220530113532632.png)
+
+![image-20220530113550231](c%E8%AF%AD%E8%A8%80%E7%AC%94%E8%AE%B0.assets/image-20220530113550231.png)
+
+
+
+
+
+
+
+**C/C++程序内存分配的几个区域：**
+
+
+
+![image-20220530113812169](c%E8%AF%AD%E8%A8%80%E7%AC%94%E8%AE%B0.assets/image-20220530113812169.png)
+
+1. 栈区（stack）：在执行函数时，函数内局部变量的存储单元都可以在栈上创建，函数执行结 束时这些存储单元自动被释放。栈内存分配运算内置于处理器的指令集中，效率很高，但是 分配的内存容量有限。 栈区主要存放运行函数而分配的局部变量、函数参数、返回数据、返 回地址等。
+2. 堆区（heap）：一般由程序员分配释放， 若程序员不释放，程序结束时可能由OS回收 。分 配方式类似于链表。 
+3. 数据段（静态区）（static）存放全局变量、静态数据。程序结束后由系统释放。
+4. 代码段：存放函数体（类成员函数和全局函数）的二进制代码
+
+有了这幅图，我们就可以更好的理解在《C语言初识》中讲的static关键字修饰局部变量的例子了。 
+
+- 实际上普通的局部变量是在栈区分配空间的，栈区的特点是在上面创建的变量出了作用域就销毁。 
+- 但是被static修饰的变量存放在数据段（静态区），数据段的特点是在上面创建的变量，直到程序 结束才销毁 所以生命周期变长。
+
+## 27、柔性数组
+
+```c
+typedef struct st_type
+{
+ int i;
+ int a[0];//柔性数组成员
+}type_a;
+
+//有些编译器会报错无法编译可以改成：
+typedef struct st_type
+{
+ int i;
+ int a[];//柔性数组成员
+}type_a;
+
+```
+
+**特点：**
+
+- 结构中的柔性数组成员前面必须至少一个其他成员。 
+- sizeof 返回的这种结构大小不包括柔性数组的内存。 
+- 包含柔性数组成员的结构用malloc ()函数进行内存的动态分配，并且分配的内存应该大于结构的大 小，以适应柔性数组的预期大小。
+
+**使用：**
+
+```c
+//代码1
+int i = 0;
+type_a *p = (type_a*)malloc(sizeof(type_a)+100*sizeof(int));
+//业务处理
+p->i = 100;
+for(i=0; i<100; i++)
+{
+ p->a[i] = i;
+}
+free(p);
+```
+
+**优势：**
+
+==第一个好处是：==
+
+方便内存释放 如果我们的代码是在一个给别人用的函数中，你在里面做了二次内存分配，并把整个结构体返回给 用户。用户调用free可以释放结构体，但是用户并不知道这个结构体内的成员也需要free，所以你 不能指望用户来发现这个事。所以，如果我们把结构体的内存以及其成员要的内存一次性分配好 了，并返回给用户一个结构体指针，用户做一次free就可以把所有的内存也给释放掉。
+
+ ==第二个好处是：==
+
+这样有利于访问速度. 连续的内存有益于**提高访问速度**，也有益于**减少内存碎片**。（其实，我个人觉得也没多高了，反正 你跑不了要用做偏移量的加法来寻址）
